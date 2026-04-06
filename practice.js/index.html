@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel ="stylesheet" href = "style.css">
+</head>
+<body>
+    <h1 id = "heading1">hello world <spam>i love coding ...</spam></h1>
+    <p class="para">
+        i am ankush sihag. i am a resesarch scholar
+    </p>
+    <p class="para">
+        i am ankush sihag. i am a resesarch scholar
+    </p>
+    <p class="para">
+        i am ankush sihag. i am a resesarch scholar
+    </p>
+    <p class="para">
+        i am ankush sihag. i am a resesarch scholar
+    </p>
+    <p class="para">
+        i am ankush sihag. i am a resesarch scholar
+    </p>
+    <ul id="list-container" class="list">
+        <li>item 1</li>
+        <li>item 2</li>
+        <li>item 3</li> 
+    </ul>
+</body>
+<script>
+    const listItems = document.querySelectorAll("#list-container li")
+    const ul = document.getElementById("list-container")
+    ul.innerHTML += "<li>item 4</li> "
+    console.log(listItems.length)
+</script>
+</html>
