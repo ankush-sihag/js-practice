@@ -11,18 +11,24 @@ app.get("/api/health", (req, res) => {
     });
 });
 
+app.get("/api/tasks", (req, res) => {
+    res.json({
+        success: true,
+        data: [
+            {
+                id: 1,
+                title: "Learn JavaScript",
+                priority: "HIGH"
+            },
+            {
+                id: 2,
+                title: "Build SmartTask",
+                priority: "MEDIUM"
+            }
+        ]
+    });
+});
+
 const server = app.listen(PORT, () => {
     console.log(`Smart Task API running on port ${PORT}`);
-});
-
-server.on("error", (error) => {
-    console.error("SERVER ERROR:", error);
-});
-
-process.on("exit", (code) => {
-    console.log("NODE PROCESS EXITED WITH CODE:", code);
-});
-
-process.on("uncaughtException", (error) => {
-    console.error("UNCAUGHT EXCEPTION:", error);
 });
