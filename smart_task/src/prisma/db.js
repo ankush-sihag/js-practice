@@ -1,3 +1,4 @@
+import "dotenv/config";
 import postgres from "@prisma/orm-postgres/runtime";
 import contractJson from "../../prisma/contract.json" with { type: "json" };
 
