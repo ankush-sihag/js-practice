@@ -17,3 +17,23 @@ export async function createTask(data) {
 
     return task;
 }
+
+export async function getAllTasks() {
+    return await db.orm.public.Task
+        .orderBy((task) => task.createdAt.desc())
+        .all();
+}
+
+export async function getTaskById(id) {
+    const task = await db.orm.public.Task.first({
+        id
+    });
+
+    if (!task) {
+        const error = new Error("Task not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    return task;
+}
