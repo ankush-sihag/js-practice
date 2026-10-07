@@ -1,5 +1,7 @@
 import express from "express";
+
 import taskRoutes from "./routes/task.routes.js";
+import { errorMiddleware } from "./middleware/error.middleware.js";
 
 const app = express();
 
@@ -13,5 +15,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/tasks", taskRoutes);
+
+app.use(errorMiddleware);
 
 export default app;

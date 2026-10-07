@@ -6,9 +6,16 @@ import {
     getTaskByIdController
 } from "../controllers/task.controller.js";
 
+import { validate } from "../middleware/validate.js";
+import { createTaskSchema } from "../validators/task.validator.js";
+
 const router = express.Router();
 
-router.post("/", createTaskController);
+router.post(
+    "/",
+    validate(createTaskSchema),
+    createTaskController
+);
 
 router.get("/", getAllTasksController);
 
