@@ -37,3 +37,47 @@ export async function getTaskById(id) {
 
     return task;
 }
+
+export async function updateTask(id, data) {
+    const existingTask = await db.orm.public.Task.first({
+        id
+    });
+
+    if (!existingTask) {
+        const error = new Error("Task not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    const updatedTask = await db.orm.public.Task
+        .where({ id })
+        .update({
+            title: data.title.trim(),
+            description: data.description ?? null,
+            priority: data.priority,
+            status: data.status,
+            dueDate: data.dueDate ?? null
+        })
+        .returning()
+        .first();
+
+    return updatedTask;
+}
+
+export async function deleteTask(id) {
+    const existingTask = await db.orm.public.Task.first({
+        id
+    });
+
+    if (!existingTask) {
+        const error = new Error("Task not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    await db.orm.public.Task
+        .where({ id })
+        .delete();
+
+    return existingTask;
+}
