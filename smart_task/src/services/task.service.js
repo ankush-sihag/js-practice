@@ -49,17 +49,31 @@ export async function updateTask(id, data) {
         throw error;
     }
 
+    const updateData = {};
+
+    if (data.title !== undefined) {
+        updateData.title = data.title.trim();
+    }
+
+    if (data.description !== undefined) {
+        updateData.description = data.description;
+    }
+
+    if (data.priority !== undefined) {
+        updateData.priority = data.priority;
+    }
+
+    if (data.status !== undefined) {
+        updateData.status = data.status;
+    }
+
+    if (data.dueDate !== undefined) {
+        updateData.dueDate = data.dueDate;
+    }
+
     const updatedTask = await db.orm.public.Task
         .where({ id })
-        .update({
-            title: data.title.trim(),
-            description: data.description ?? null,
-            priority: data.priority,
-            status: data.status,
-            dueDate: data.dueDate ?? null
-        })
-        .returning()
-        .first();
+        .update(updateData);
 
     return updatedTask;
 }

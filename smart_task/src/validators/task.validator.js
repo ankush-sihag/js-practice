@@ -24,3 +24,5 @@ export const createTaskSchema = z.object({
         .datetime()
         .optional()
 });
+
+export const updateTaskSchema = createTaskSchema.partial();
