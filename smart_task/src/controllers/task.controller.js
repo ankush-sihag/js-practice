@@ -24,11 +24,12 @@ export async function createTaskController(req, res, next) {
 
 export async function getAllTasksController(req, res, next) {
     try {
-        const tasks = await getAllTasks();
+        const result = await getAllTasks(req.query);
 
         res.status(200).json({
             success: true,
-            data: tasks
+            data: result.tasks,
+            pagination: result.pagination
         });
     } catch (error) {
         next(error);

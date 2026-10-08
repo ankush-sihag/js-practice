@@ -18,10 +18,37 @@ export async function createTask(data) {
     return task;
 }
 
-export async function getAllTasks() {
-    return await db.orm.public.Task
+export async function getAllTasks(query) {
+    const page = Math.max(Number(query.page) || 1, 1);
+
+    const limit = Math.min(
+        Math.max(Number(query.limit) || 10, 1),
+        100
+    );
+
+    const offset = (page - 1) * limit;
+
+    const tasks = await db.orm.public.Task
         .orderBy((task) => task.createdAt.desc())
+        .limit(limit)
+        .offset(offset)
         .all();
+
+    const allTasks = await db.orm.public.Task.all();
+
+    const total = allTasks.length;
+
+    return {
+        tasks,
+        pagination: {
+            page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit),
+            hasNextPage: page < Math.ceil(total / limit),
+            hasPreviousPage: page > 1
+        }
+    };
 }
 
 export async function getTaskById(id) {
