@@ -28,15 +28,49 @@ export async function getAllTasks(query) {
 
     const offset = (page - 1) * limit;
 
-    const tasks = await db.orm.public.Task
+    const status = query.status;
+    const priority = query.priority;
+
+    let taskQuery = db.orm.public.Task;
+
+    // Status filter
+    if (status) {
+        taskQuery = taskQuery.where({
+            status
+        });
+    }
+
+    // Priority filter
+    if (priority) {
+        taskQuery = taskQuery.where({
+            priority
+        });
+    }
+
+    const tasks = await taskQuery
         .orderBy((task) => task.createdAt.desc())
         .limit(limit)
         .offset(offset)
         .all();
 
-    const allTasks = await db.orm.public.Task.all();
+    let countQuery = db.orm.public.Task;
+
+    if (status) {
+        countQuery = countQuery.where({
+            status
+        });
+    }
+
+    if (priority) {
+        countQuery = countQuery.where({
+            priority
+        });
+    }
+
+    const allTasks = await countQuery.all();
 
     const total = allTasks.length;
+    const totalPages = Math.ceil(total / limit);
 
     return {
         tasks,
@@ -44,8 +78,8 @@ export async function getAllTasks(query) {
             page,
             limit,
             total,
-            totalPages: Math.ceil(total / limit),
-            hasNextPage: page < Math.ceil(total / limit),
+            totalPages,
+            hasNextPage: page < totalPages,
             hasPreviousPage: page > 1
         }
     };
