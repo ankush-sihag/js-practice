@@ -30,20 +30,28 @@ export async function getAllTasks(query) {
 
     const status = query.status;
     const priority = query.priority;
+    const search = query.search?.trim();
 
     let taskQuery = db.orm.public.Task;
 
-    // Status filter
     if (status) {
         taskQuery = taskQuery.where({
             status
         });
     }
 
-    // Priority filter
     if (priority) {
         taskQuery = taskQuery.where({
             priority
+        });
+    }
+
+    if (search) {
+        taskQuery = taskQuery.where({
+            title: {
+                contains: search,
+                mode: "insensitive"
+            }
         });
     }
 
@@ -56,14 +64,19 @@ export async function getAllTasks(query) {
     let countQuery = db.orm.public.Task;
 
     if (status) {
-        countQuery = countQuery.where({
-            status
-        });
+        countQuery = countQuery.where({ status });
     }
 
     if (priority) {
+        countQuery = countQuery.where({ priority });
+    }
+
+    if (search) {
         countQuery = countQuery.where({
-            priority
+            title: {
+                contains: search,
+                mode: "insensitive"
+            }
         });
     }
 
