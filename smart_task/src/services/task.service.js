@@ -32,6 +32,44 @@ export async function getAllTasks(query) {
     const priority = query.priority;
     const search = query.search?.trim();
 
+    const sortBy = query.sortBy || "createdAt";
+    const sortOrder = query.sortOrder === "asc" ? "asc" : "desc";
+
+    const getSortExpression = (task) => {
+        switch (sortBy) {
+            case "title":
+                return sortOrder === "asc"
+                    ? task.title.asc()
+                    : task.title.desc();
+
+            case "priority":
+                return sortOrder === "asc"
+                    ? task.priority.asc()
+                    : task.priority.desc();
+
+            case "status":
+                return sortOrder === "asc"
+                    ? task.status.asc()
+                    : task.status.desc();
+
+            case "dueDate":
+                return sortOrder === "asc"
+                    ? task.dueDate.asc()
+                    : task.dueDate.desc();
+
+            case "updatedAt":
+                return sortOrder === "asc"
+                    ? task.updatedAt.asc()
+                    : task.updatedAt.desc();
+
+            case "createdAt":
+            default:
+                return sortOrder === "asc"
+                    ? task.createdAt.asc()
+                    : task.createdAt.desc();
+        }
+    };
+
     let taskQuery = db.orm.public.Task;
 
     if (status) {
@@ -56,7 +94,7 @@ export async function getAllTasks(query) {
     }
 
     const tasks = await taskQuery
-        .orderBy((task) => task.createdAt.desc())
+        .orderBy(getSortExpression)
         .limit(limit)
         .offset(offset)
         .all();
